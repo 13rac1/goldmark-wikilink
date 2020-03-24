@@ -1,0 +1,6 @@
+1
+//- - - - - - - - -//
+Here is a [[Wiki Linked Thing]].
+//- - - - - - - - -//
+<p>Here is a <a href="Wiki%20Linked%20Thing.html">Wiki Linked Thing</a>
+//= = = = = = = = = = = = = = = = = = = = = = = =//
