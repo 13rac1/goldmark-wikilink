@@ -2,5 +2,25 @@
 //- - - - - - - - -//
 Here is a [[Wiki Linked Thing]].
 //- - - - - - - - -//
-<p>Here is a <a href="Wiki%20Linked%20Thing.html">Wiki Linked Thing</a>
+<p>Here is a <a href="Wiki%20Linked%20Thing.html">Wiki Linked Thing</a>.</p>
+//= = = = = = = = = = = = = = = = = = = = = = = =//
+2
+//- - - - - - - - -//
+[[Front Link]] to see.
+//- - - - - - - - -//
+<p><a href="Front%20Link.html">Front Link</a> to see.</p>
+//= = = = = = = = = = = = = = = = = = = = = = = =//
+3
+//- - - - - - - - -//
+Now I try an [[End link]]
+//- - - - - - - - -//
+<p>Now I try an <a href="End%20link.html">End link</a></p>
+//= = = = = = = = = = = = = = = = = = = = = = = =//
+4
+//- - - - - - - - -//
+These links don't [[Split
+across lines.]]
+//- - - - - - - - -//
+<p>These links don't [[Split
+across lines.]]</p>
 //= = = = = = = = = = = = = = = = = = = = = = = =//

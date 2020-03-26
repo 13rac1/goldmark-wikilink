@@ -23,7 +23,41 @@ func (wl *wikilinksParser) Trigger() []byte {
 }
 
 func (wl *wikilinksParser) Parse(parent ast.Node, block text.Reader, pc parser.Context) ast.Node {
-	panic("implement me")
+	line, segment := block.PeekLine()
+	gotFirst := false
+	pos := 2
+	for ; pos < len(line); pos++ {
+		b := line[pos]
+		if b == ']' {
+			if gotFirst {
+				break
+			} else {
+				gotFirst = true
+			}
+		} else if gotFirst {
+			gotFirst = false
+		}
+	}
+
+	if !gotFirst && pos >= len(line) {
+		return nil
+	}
+
+	destination := block.Value(text.NewSegment(segment.Start+2, segment.Start+pos-1))
+	destination = append(destination, '.')
+	destination = append(destination, 'h')
+	destination = append(destination, 't')
+	destination = append(destination, 'm')
+	destination = append(destination, 'l')
+
+	block.Advance(pos+1)
+
+	link := ast.NewLink()
+	link.Destination = destination
+	newText := ast.NewText()
+	newText.Segment = text.NewSegment(segment.Start+2, segment.Start+pos-1)
+	link.AppendChild(link, newText)
+	return link
 }
 
 type wikilinks struct {
