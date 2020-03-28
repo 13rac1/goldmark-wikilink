@@ -1,4 +1,4 @@
-module goldmark-wikilinks
+module github.com/dangoor/goldmark-wikilinks
 
 go 1.13
 
