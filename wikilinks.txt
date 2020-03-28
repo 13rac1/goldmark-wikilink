@@ -24,3 +24,9 @@ across lines.]]
 <p>These links don't [[Split
 across lines.]]</p>
 //= = = = = = = = = = = = = = = = = = = = = = = =//
+5
+//- - - - - - - - -//
+You can have [a regular link](https://twitter.com/) and a [[wiki link]] on the same line.
+//- - - - - - - - -//
+<p>You can have <a href="https://twitter.com/">a regular link</a> and a <a href="wiki%20link.html">wiki link</a> on the same line.</p>
+//= = = = = = = = = = = = = = = = = = = = = = = =//

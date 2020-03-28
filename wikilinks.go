@@ -24,6 +24,9 @@ func (wl *wikilinksParser) Trigger() []byte {
 
 func (wl *wikilinksParser) Parse(parent ast.Node, block text.Reader, pc parser.Context) ast.Node {
 	line, segment := block.PeekLine()
+	if line[1] != '[' {
+		return nil
+	}
 	gotFirst := false
 	pos := 2
 	for ; pos < len(line); pos++ {
