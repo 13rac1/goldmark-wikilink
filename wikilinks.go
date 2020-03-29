@@ -8,14 +8,21 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
-type wikilinksParser struct {
+type FilenameNormalizer func (linkText string) string
 
+type wikilinksParser struct {
+	normalizer FilenameNormalizer
 }
 
 var defaultWikilinksParser = &wikilinksParser{}
 
-func NewWikilinksParser() parser.InlineParser {
+func NewWikilinksParser() *wikilinksParser {
 	return defaultWikilinksParser
+}
+
+func (wl *wikilinksParser) WithNormalizer(fn FilenameNormalizer) *wikilinksParser {
+	wl.normalizer = fn
+	return wl
 }
 
 func (wl *wikilinksParser) Trigger() []byte {
@@ -47,11 +54,16 @@ func (wl *wikilinksParser) Parse(parent ast.Node, block text.Reader, pc parser.C
 	}
 
 	destination := block.Value(text.NewSegment(segment.Start+2, segment.Start+pos-1))
-	destination = append(destination, '.')
-	destination = append(destination, 'h')
-	destination = append(destination, 't')
-	destination = append(destination, 'm')
-	destination = append(destination, 'l')
+	if wl.normalizer != nil {
+		textLink := wl.normalizer(string(destination))
+		destination = []byte(textLink)
+	} else {
+		destination = append(destination, '.')
+		destination = append(destination, 'h')
+		destination = append(destination, 't')
+		destination = append(destination, 'm')
+		destination = append(destination, 'l')
+	}
 
 	block.Advance(pos+1)
 
