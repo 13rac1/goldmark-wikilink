@@ -36,3 +36,25 @@ You can [[change me]] with an extension.
 //- - - - - - - - -//
 <p>You can <a href="ChangeMe.html">change me</a> with an extension.</p>
 //= = = = = = = = = = = = = = = = = = = = = = = =//
+7
+//- - - - - - - - -//
+* This is an unordered list
+* That has a [[Wiki Link]] in the second bullet
+* But not the third
+//- - - - - - - - -//
+<ul>
+<li>This is an unordered list</li>
+<li>That has a <a href="Wiki%20Link.html">Wiki Link</a> in the second bullet</li>
+<li>But not the third</li>
+</ul>
+//= = = = = = = = = = = = = = = = = = = = = = = =//
+8
+//- - - - - - - - -//
+Here is a multi-line paragraph which is full of text and
+also has a [[Wiki Link]] in the middle of it, but I should
+get the _full set_ of text in my tracker.
+//- - - - - - - - -//
+<p>Here is a multi-line paragraph which is full of text and
+also has a <a href="Wiki%20Link.html">Wiki Link</a> in the middle of it, but I should
+get the <em>full set</em> of text in my tracker.</p>
+//= = = = = = = = = = = = = = = = = = = = = = = =//

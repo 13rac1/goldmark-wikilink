@@ -10,8 +10,13 @@ import (
 
 type FilenameNormalizer func (linkText string) string
 
+type WikilinkTracker interface {
+	LinkWithContext(destination string, context string)
+}
+
 type wikilinksParser struct {
 	normalizer FilenameNormalizer
+	tracker WikilinkTracker
 }
 
 var defaultWikilinksParser = &wikilinksParser{}
@@ -22,6 +27,11 @@ func NewWikilinksParser() *wikilinksParser {
 
 func (wl *wikilinksParser) WithNormalizer(fn FilenameNormalizer) *wikilinksParser {
 	wl.normalizer = fn
+	return wl
+}
+
+func (wl *wikilinksParser) WithTracker(wlt WikilinkTracker) *wikilinksParser {
+	wl.tracker = wlt
 	return wl
 }
 
@@ -54,15 +64,22 @@ func (wl *wikilinksParser) Parse(parent ast.Node, block text.Reader, pc parser.C
 	}
 
 	destination := block.Value(text.NewSegment(segment.Start+2, segment.Start+pos-1))
+	destText := string(destination)
 	if wl.normalizer != nil {
-		textLink := wl.normalizer(string(destination))
-		destination = []byte(textLink)
+		destText = wl.normalizer(destText)
 	} else {
-		destination = append(destination, '.')
-		destination = append(destination, 'h')
-		destination = append(destination, 't')
-		destination = append(destination, 'm')
-		destination = append(destination, 'l')
+		destText += ".html"
+	}
+	destination = []byte(destText)
+
+	if wl.tracker != nil {
+		context := ""
+		lines := parent.Lines()
+		for i := 0; i < lines.Len(); i++ {
+			seg := lines.At(i)
+			context += string(block.Value(seg))
+		}
+		wl.tracker.LinkWithContext(destText, context)
 	}
 
 	block.Advance(pos+1)
