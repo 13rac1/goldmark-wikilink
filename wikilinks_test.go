@@ -9,13 +9,6 @@ import (
 	"testing"
 )
 
-func normalizer(linkText string) string {
-	if linkText == "change me" {
-		return "ChangeMe.html"
-	}
-	return linkText + ".html"
-}
-
 type Backlink struct {
 	destination string
 	context string
@@ -33,6 +26,15 @@ func (t *Tracker) LinkWithContext(dest string, context string) {
 	t.backlinks = append(t.backlinks, bl)
 }
 
+func (t *Tracker) Normalize(linkText string) string {
+	if linkText == "change me" {
+		return "ChangeMe.html"
+	}
+	return linkText + ".html"
+}
+
+
+
 func TestWikilinks(t *testing.T) {
 	markdown := goldmark.New(
 		goldmark.WithRendererOptions(
@@ -43,7 +45,7 @@ func TestWikilinks(t *testing.T) {
 
 	markdown.Parser().AddOptions(
 		parser.WithInlineParsers(util.Prioritized(NewWikilinksParser().
-			WithNormalizer(normalizer).WithTracker(tracker), 102)),
+			WithNormalizer(tracker).WithTracker(tracker), 102)),
 	)
 	testutil.DoTestCaseFile(markdown, "wikilinks.txt", t)
 	if len(tracker.backlinks) != 7 {
