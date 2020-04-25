@@ -13,7 +13,7 @@ type FilenameNormalizer interface {
 }
 
 type WikilinkTracker interface {
-	LinkWithContext(destination string, context string)
+	LinkWithContext(destText string, destFilename string, context string)
 }
 
 type wikilinksParser struct {
@@ -67,12 +67,13 @@ func (wl *wikilinksParser) Parse(parent ast.Node, block text.Reader, pc parser.C
 
 	destination := block.Value(text.NewSegment(segment.Start+2, segment.Start+pos-1))
 	destText := string(destination)
+	destFilename := destText
 	if wl.normalizer != nil {
-		destText = wl.normalizer.Normalize(destText)
+		destFilename = wl.normalizer.Normalize(destFilename)
 	} else {
-		destText += ".html"
+		destFilename += ".html"
 	}
-	destination = []byte(destText)
+	destination = []byte(destFilename)
 
 	if wl.tracker != nil {
 		context := ""
@@ -81,7 +82,7 @@ func (wl *wikilinksParser) Parse(parent ast.Node, block text.Reader, pc parser.C
 			seg := lines.At(i)
 			context += string(block.Value(seg))
 		}
-		wl.tracker.LinkWithContext(destText, context)
+		wl.tracker.LinkWithContext(destText, destFilename, context)
 	}
 
 	block.Advance(pos+1)

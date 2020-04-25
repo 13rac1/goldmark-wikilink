@@ -10,7 +10,8 @@ import (
 )
 
 type Backlink struct {
-	destination string
+	destFilename string
+	destText string
 	context string
 }
 
@@ -18,9 +19,10 @@ type Tracker struct {
 	backlinks []Backlink
 }
 
-func (t *Tracker) LinkWithContext(dest string, context string) {
+func (t *Tracker) LinkWithContext(destText string, destFilename string, context string) {
 	bl := Backlink{
-		destination: dest,
+		destText: destText,
+		destFilename: destFilename,
 		context:     context,
 	}
 	t.backlinks = append(t.backlinks, bl)
@@ -54,6 +56,12 @@ func TestWikilinks(t *testing.T) {
 	listlink := tracker.backlinks[5]
 	if listlink.context != "That has a [[Wiki Link]] in the second bullet" {
 		t.Errorf("Did not get expected context for bullet: %s", listlink.context)
+	}
+	if listlink.destText != "Wiki Link" {
+		t.Errorf("Did not get expected destination text: %s", listlink.destText)
+	}
+	if listlink.destFilename != "Wiki Link.html" {
+		t.Errorf("Did not get expected destination filename: %s", listlink.destFilename)
 	}
 	paralink := tracker.backlinks[6]
 	if paralink.context != `Here is a multi-line paragraph which is full of text and
