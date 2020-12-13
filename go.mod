@@ -1,5 +1,5 @@
-module github.com/dangoor/goldmark-wikilinks
+module github.com/13rac1/goldmark-wikilink
 
-go 1.13
+go 1.15
 
-require github.com/yuin/goldmark v1.1.25
+require github.com/yuin/goldmark v1.2.1
