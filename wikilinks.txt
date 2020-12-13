@@ -32,12 +32,6 @@ You can have [a regular link](https://twitter.com/) and a [[wiki link]] on the s
 //= = = = = = = = = = = = = = = = = = = = = = = =//
 6
 //- - - - - - - - -//
-You can [[change me]] with an extension.
-//- - - - - - - - -//
-<p>You can <a href="ChangeMe.html">change me</a> with an extension.</p>
-//= = = = = = = = = = = = = = = = = = = = = = = =//
-7
-//- - - - - - - - -//
 * This is an unordered list
 * That has a [[Wiki Link]] in the second bullet
 * But not the third
@@ -48,7 +42,7 @@ You can [[change me]] with an extension.
 <li>But not the third</li>
 </ul>
 //= = = = = = = = = = = = = = = = = = = = = = = =//
-8
+7
 //- - - - - - - - -//
 Here is a multi-line paragraph which is full of text and
 also has a [[Wiki Link]] in the middle of it, but I should
