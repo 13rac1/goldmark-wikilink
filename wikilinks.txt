@@ -52,3 +52,9 @@ get the _full set_ of text in my tracker.
 also has a <a href="Wiki%20Link.html">Wiki Link</a> in the middle of it, but I should
 get the <em>full set</em> of text in my tracker.</p>
 //= = = = = = = = = = = = = = = = = = = = = = = =//
+8
+//- - - - - - - - -//
+[[ Extra Spaces ]]
+//- - - - - - - - -//
+<p><a href="Extra%20Spaces.html">Extra Spaces</a></p>
+//= = = = = = = = = = = = = = = = = = = = = = = =//

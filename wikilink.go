@@ -3,6 +3,7 @@ package wikilink
 import (
 	"fmt"
 	"net/url"
+	"strings"
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
@@ -80,12 +81,13 @@ func (p *wikilinksParser) Parse(parent ast.Node, block text.Reader, pc parser.Co
 
 	// extract the text of the wikilink and normalize it to figure out the destination
 	destination := block.Value(text.NewSegment(segment.Start+2, segment.Start+pos-1))
-	destFilename := p.normalizer.Normalize(string(destination))
+	destString := strings.TrimSpace(string(destination))
+	destFilename := p.normalizer.Normalize(destString)
 
 	block.Advance(pos + 1)
 
 	link := ast.NewLink()
-	link.Title = destination
+	link.Title = []byte(destString)
 	link.Destination = []byte(destFilename)
 	wl := NewWikilink(link)
 	return wl
