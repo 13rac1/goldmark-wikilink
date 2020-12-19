@@ -64,3 +64,9 @@ get the <em>full set</em> of text in my tracker.</p>
 //- - - - - - - - -//
 <p><a href="Multiple.html">Multiple</a> <a href="Wikilinks.html">Wikilinks</a></p>
 //= = = = = = = = = = = = = = = = = = = = = = = =//
+10
+//- - - - - - - - -//
+[[😁]]
+//- - - - - - - - -//
+<p><a href="%F0%9F%98%81.html">😁</a></p>
+//= = = = = = = = = = = = = = = = = = = = = = = =//

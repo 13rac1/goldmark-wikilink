@@ -27,6 +27,7 @@ type wikilinksParser struct {
 type linkNormalizer struct{}
 
 func (t *linkNormalizer) Normalize(linkText string) string {
+	// Note: This escapes emoji 😁 => %F0%9F%98%81
 	return url.PathEscape(linkText) + ".html"
 }
 
