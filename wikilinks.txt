@@ -58,3 +58,9 @@ get the <em>full set</em> of text in my tracker.</p>
 //- - - - - - - - -//
 <p><a href="Extra%20Spaces.html">Extra Spaces</a></p>
 //= = = = = = = = = = = = = = = = = = = = = = = =//
+9
+//- - - - - - - - -//
+[[Multiple]] [[Wikilinks]]
+//- - - - - - - - -//
+<p><a href="Multiple.html">Multiple</a> <a href="Wikilinks.html">Wikilinks</a></p>
+//= = = = = = = = = = = = = = = = = = = = = = = =//
