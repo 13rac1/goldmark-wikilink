@@ -13,14 +13,66 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
+type wlExtension struct{}
+
+// Option is a functional option type for this extension.
+type Option func(*wlExtension)
+
+// New returns a new Wikilink extension.
+func New(opts ...Option) goldmark.Extender {
+	e := &wlExtension{}
+	for _, opt := range opts {
+		opt(e)
+	}
+	return e
+}
+
+// Extend adds a wikilink parser to a Goldmark parser
+func (wl *wlExtension) Extend(m goldmark.Markdown) {
+	m.Parser().AddOptions(
+		parser.WithInlineParsers(
+			util.Prioritized(NewParser(), 102),
+		),
+	)
+	m.Renderer().AddOptions(
+		renderer.WithNodeRenderers(
+			util.Prioritized(NewHTMLRenderer(), 500),
+		),
+	)
+}
+
+// Wikilink struct represents a Wikilink of the Markdown text.
+type Wikilink struct {
+	ast.Link
+}
+
+// KindWikilink is a NodeKind of the Wikilink node.
+var KindWikilink = ast.NewNodeKind("Wikilink")
+
+// Kind implements Node.Kind.
+func (n *Wikilink) Kind() ast.NodeKind {
+	return KindWikilink
+}
+
+// NewWikilink returns a new Wikilink node.
+func NewWikilink(l *ast.Link) *Wikilink {
+	c := &Wikilink{
+		Link: *l,
+	}
+	c.Destination = l.Destination // AKA Target
+	c.Title = l.Title
+
+	return c
+}
+
 // FilenameNormalizer is a plugin which takes link text and converts the text given to
 // a filename which can be linked to in the final format of your file.
 type FilenameNormalizer interface {
 	Normalize(linkText string) string
 }
 
-// wikilinksParser keeps track of the plugins used for processing wikilinks.
-type wikilinksParser struct {
+// Parser keeps track of the plugins used for processing wikilinks.
+type Parser struct {
 	normalizer FilenameNormalizer
 }
 
@@ -31,27 +83,26 @@ func (t *linkNormalizer) Normalize(linkText string) string {
 	return url.PathEscape(linkText) + ".html"
 }
 
-var defaultWikilinksParser = &wikilinksParser{
-	normalizer: &linkNormalizer{},
-}
-
 // NewParser gives you back a parser that you can use to process wikilinks.
-func NewParser() *wikilinksParser {
-	return defaultWikilinksParser
+func NewParser() *Parser {
+	return &Parser{
+		normalizer: &linkNormalizer{},
+	}
 }
 
 // WithNormalizer is the fluent interface for replacing the default normalizer plugin.
-func (p *wikilinksParser) WithNormalizer(fn FilenameNormalizer) *wikilinksParser {
+func (p *Parser) WithNormalizer(fn FilenameNormalizer) *Parser {
 	p.normalizer = fn
 	return p
 }
 
 // Trigger looks for the [[ beginning of wikilinks.
-func (p *wikilinksParser) Trigger() []byte {
+func (p *Parser) Trigger() []byte {
 	return []byte{'[', '['}
 }
 
-func (p *wikilinksParser) Parse(parent ast.Node, block text.Reader, pc parser.Context) ast.Node {
+// Parse implements the parser.Parser interface for Wikilinks in markdown
+func (p *Parser) Parse(parent ast.Node, block text.Reader, pc parser.Context) ast.Node {
 	line, segment := block.PeekLine()
 	// Must specifically confirm the second '['.
 	if line[1] != '[' {
@@ -92,48 +143,6 @@ func (p *wikilinksParser) Parse(parent ast.Node, block text.Reader, pc parser.Co
 	link.Destination = []byte(destFilename)
 	wl := NewWikilink(link)
 	return wl
-}
-
-type wlExtension struct {
-}
-
-// Extension is the default extension instance.
-var Extension = &wlExtension{}
-
-// Extend adds a wikilink parser to a Goldmark parser
-func (wl *wlExtension) Extend(m goldmark.Markdown) {
-	m.Parser().AddOptions(
-		parser.WithInlineParsers(util.Prioritized(defaultWikilinksParser, 102)),
-	)
-	m.Renderer().AddOptions(
-		renderer.WithNodeRenderers(
-			util.Prioritized(NewHTMLRenderer(), 500),
-		),
-	)
-}
-
-// Wikilink struct represents a Wikilink of the Markdown text.
-type Wikilink struct {
-	ast.Link
-}
-
-// KindWikilink is a NodeKind of the Wikilink node.
-var KindWikilink = ast.NewNodeKind("Wikilink")
-
-// Kind implements Node.Kind.
-func (n *Wikilink) Kind() ast.NodeKind {
-	return KindWikilink
-}
-
-// NewWikilink returns a new Wikilink node.
-func NewWikilink(l *ast.Link) *Wikilink {
-	c := &Wikilink{
-		Link: *l,
-	}
-	c.Destination = l.Destination // AKA Target
-	c.Title = l.Title
-
-	return c
 }
 
 // HTMLRenderer struct is a renderer.NodeRenderer implementation for the extension.

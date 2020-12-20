@@ -1,6 +1,6 @@
 # goldmark-wikilink
 
-goldmark-embed is an extension for the [goldmark][goldmark] library that extends
+goldmark-wikilink is an extension for the [goldmark][goldmark] library that extends
 Markdown to support `[[title]]` [Wikilink][help-link] style links with a new AST
 type and HTML Renderer.
 

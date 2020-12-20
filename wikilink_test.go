@@ -15,7 +15,7 @@ func TestWikilink(t *testing.T) {
 			html.WithUnsafe(),
 		),
 		goldmark.WithExtensions(
-			wikilink.Extension,
+			wikilink.New(),
 		),
 	)
 
