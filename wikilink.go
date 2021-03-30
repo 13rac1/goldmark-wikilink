@@ -13,14 +13,25 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
-type wlExtension struct{}
+type wlExtension struct {
+	normalizer FilenameNormalizer
+}
 
 // Option is a functional option type for this extension.
 type Option func(*wlExtension)
 
+// WithFilenameNormalizer sets the normaliser that will be used on filenames.
+func WithFilenameNormalizer(normalizer FilenameNormalizer) func(*wlExtension) {
+	return func(extension *wlExtension) {
+		extension.normalizer = normalizer
+	}
+}
+
 // New returns a new Wikilink extension.
 func New(opts ...Option) goldmark.Extender {
-	e := &wlExtension{}
+	e := &wlExtension{
+		normalizer: &linkNormalizer{},
+	}
 	for _, opt := range opts {
 		opt(e)
 	}
@@ -31,7 +42,7 @@ func New(opts ...Option) goldmark.Extender {
 func (wl *wlExtension) Extend(m goldmark.Markdown) {
 	m.Parser().AddOptions(
 		parser.WithInlineParsers(
-			util.Prioritized(NewParser(), 102),
+			util.Prioritized(NewParser().WithNormalizer(wl.normalizer), 102),
 		),
 	)
 	m.Renderer().AddOptions(
